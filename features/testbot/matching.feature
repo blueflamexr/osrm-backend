@@ -174,8 +174,8 @@ Feature: Basic Map Matching
     Scenario: Testbot - Speed greater than speed threshhold, should split
         Given the node map
             """
-            a b c d
-                e
+            a b              c d
+                             e
             """
 
         And the ways
@@ -184,13 +184,13 @@ Feature: Basic Map Matching
 
         When I match I should get
             | trace | timestamps | matchings |
-            | abcd  | 0 1 5 6    | ab,cd     |
+            | abcd  | 0 1 2 3    | ab,cd     |
 
     Scenario: Testbot - Speed less than speed threshhold, should not split
         Given the node map
             """
-            a b c d
-                e
+            a b              c d
+                             e
             """
 
         And the ways
@@ -199,4 +199,4 @@ Feature: Basic Map Matching
 
         When I match I should get
             | trace | timestamps | matchings |
-            | abcd  | 0 1 5 6    | abcd      |
+            | abcd  | 0 1 2 3    | abcd      |
