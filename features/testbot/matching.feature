@@ -176,6 +176,7 @@ Feature: Basic Map Matching
         Given the node map
             """
             a b c d
+                e
             """
 
         And the ways
@@ -183,13 +184,14 @@ Feature: Basic Map Matching
             | abcd  | no     |
 
         When I match I should get
-            | trace | timestamps   | matchings |
-            | abcd  | 0 1 620 630  | ab, cd    |
+            | trace | timestamps | matchings |
+            | abcd  | 0 1 5 6    | ab,cd     |
 
     Scenario: Testbot - Max speed too high should split but checking to see if unsplit case still passes, and it does sadly
         Given the node map
             """
             a b c d
+                e
             """
 
         And the ways
@@ -197,5 +199,5 @@ Feature: Basic Map Matching
             | abcd  | no     |
 
         When I match I should get
-            | trace | timestamps   | matchings |
-            | abcd  | 0 1 620 630  | abcd      |
+            | trace | timestamps | matchings |
+            | abcd  | 0 1 5 6    | abcd      |

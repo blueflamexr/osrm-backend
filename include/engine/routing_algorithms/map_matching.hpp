@@ -102,6 +102,8 @@ class MapMatching final : public BasicRoutingInterface<DataFacadeT, MapMatching<
             {
                 std::cout << "facade.GetMapMatchingMaxSpeed()" << std::endl;
                 std::cout << facade.GetMapMatchingMaxSpeed() << std::endl;
+                std::cout << "median_sample_time" << std::endl;
+                std::cout << median_sample_time << std::endl;
                 return median_sample_time * facade.GetMapMatchingMaxSpeed();
             }
             else
