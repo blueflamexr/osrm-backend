@@ -20,7 +20,7 @@ properties.continue_straight_at_waypoint = true
 properties.use_turn_restrictions         = true
 properties.traffic_signal_penalty        = 7     -- seconds
 properties.u_turn_penalty                = 20
-properties.max_speed_for_map_matching    = 25
+properties.max_speed_for_map_matching    = 30/3.6
 
 function limit_speed(speed, limits)
   -- don't use ipairs(), since it stops at the first nil value
