@@ -131,7 +131,7 @@ void LuaScriptingEnvironment::InitContext(LuaScriptingContext &context)
              .property("u_turn_penalty",
                        &ProfileProperties::GetUturnPenalty,
                        &ProfileProperties::SetUturnPenalty)
-             .property("max_speed_for_mapmatching",
+             .property("max_speed_for_map_matching",
                        &ProfileProperties::GetMaxSpeedForMapMatching,
                        &ProfileProperties::SetMaxSpeedForMapMatching)
              .def_readwrite("use_turn_restrictions", &ProfileProperties::use_turn_restrictions)

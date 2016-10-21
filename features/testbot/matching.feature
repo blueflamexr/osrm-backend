@@ -170,3 +170,32 @@ Feature: Basic Map Matching
         When I match I should get
             | trace | matchings | geometry                                |
             | abd   | abd       | 1,1,1,1.00009,1,1.00009,0.99991,1.00009 |
+
+
+    Scenario: Testbot - Max speed too high should split
+        Given the node map
+            """
+            a b c d
+            """
+
+        And the ways
+            | nodes | oneway |
+            | abcd  | no     |
+
+        When I match I should get
+            | trace | timestamps   | matchings |
+            | abcd  | 0 1 620 630  | ab, cd    |
+
+    Scenario: Testbot - Max speed too high should split but checking to see if unsplit case still passes, and it does sadly
+        Given the node map
+            """
+            a b c d
+            """
+
+        And the ways
+            | nodes | oneway |
+            | abcd  | no     |
+
+        When I match I should get
+            | trace | timestamps   | matchings |
+            | abcd  | 0 1 620 630  | abcd      |
