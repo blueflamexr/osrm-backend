@@ -171,8 +171,7 @@ Feature: Basic Map Matching
             | trace | matchings | geometry                                |
             | abd   | abd       | 1,1,1,1.00009,1,1.00009,0.99991,1.00009 |
 
-
-    Scenario: Testbot - Max speed too high should split
+    Scenario: Testbot - Speed greater than speed threshhold, should split
         Given the node map
             """
             a b c d
@@ -187,7 +186,7 @@ Feature: Basic Map Matching
             | trace | timestamps | matchings |
             | abcd  | 0 1 5 6    | ab,cd     |
 
-    Scenario: Testbot - Max speed too high should split but checking to see if unsplit case still passes, and it does sadly
+    Scenario: Testbot - Speed less than speed threshhold, should not split
         Given the node map
             """
             a b c d
