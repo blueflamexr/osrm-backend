@@ -108,6 +108,7 @@ class MapMatching final : public BasicRoutingInterface<DataFacadeT, MapMatching<
             }
             else
             {
+                 std::cout << "using MAX_DISTANCE_DELTA" << std::endl;
                 return MAX_DISTANCE_DELTA;
             }
         }();
@@ -266,6 +267,7 @@ class MapMatching final : public BasicRoutingInterface<DataFacadeT, MapMatching<
                     double network_distance;
                     if (facade.GetCoreSize() > 0)
                     {
+                        std::cout << "if (facade.GetCoreSize() > 0) === true" << std::endl;
                         forward_core_heap.Clear();
                         reverse_core_heap.Clear();
                         network_distance = super::GetNetworkDistanceWithCore(
@@ -279,7 +281,7 @@ class MapMatching final : public BasicRoutingInterface<DataFacadeT, MapMatching<
                             duration_upper_bound);
                     }
                     else
-                    {
+                    {   std::cout << "if (facade.GetCoreSize() > 0) === false" << std::endl;
                         network_distance = super::GetNetworkDistance(
                             facade,
                             forward_heap,
@@ -294,6 +296,10 @@ class MapMatching final : public BasicRoutingInterface<DataFacadeT, MapMatching<
                     // very low probability transition -> prune
                     if (d_t >= max_distance_delta)
                     {
+                        std::cout << "d_t" << std::endl;
+                        std::cout << d_t << std::endl;
+                        std::cout << "max_distance_delta" << std::endl;
+                        std::cout << max_distance_delta << std::endl;
                         continue;
                     }
 
