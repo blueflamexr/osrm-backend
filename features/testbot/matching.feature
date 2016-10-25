@@ -5,12 +5,11 @@ Feature: Basic Map Matching
         Given the profile "testbot"
         Given a grid size of 10 meters
         Given the extract extra arguments "--generate-edge-lookup"
-
-    Scenario: Testbot - Map matching with outlier that has no candidate
-        Given a grid size of 100 meters
         Given the query options
             | geometries | geojson |
 
+    Scenario: Testbot - Map matching with outlier that has no candidate
+        Given a grid size of 100 meters
         Given the node map
             """
             a b c d
@@ -29,9 +28,6 @@ Feature: Basic Map Matching
             | ab1d  | 0 1 2 3    | abcd      |
 
     Scenario: Testbot - Map matching with trace splitting
-        Given the query options
-            | geometries | geojson |
-
         Given the node map
             """
             a b c d
@@ -63,9 +59,6 @@ Feature: Basic Map Matching
             | abcd  | 0 1 2 3    | abcd      |
 
     Scenario: Testbot - Map matching with small distortion
-        Given the query options
-            | geometries | geojson |
-
         Given the node map
             """
             a b c d e
@@ -90,9 +83,6 @@ Feature: Basic Map Matching
 
     Scenario: Testbot - Map matching with oneways
         Given a grid size of 10 meters
-        Given the query options
-            | geometries | geojson |
-
         Given the node map
             """
             a b c d
@@ -110,9 +100,6 @@ Feature: Basic Map Matching
 
     Scenario: Testbot - Matching with oneway streets
         Given a grid size of 10 meters
-        Given the query options
-            | geometries | geojson |
-
         Given the node map
             """
             a b c d
@@ -135,7 +122,6 @@ Feature: Basic Map Matching
 
     Scenario: Testbot - Duration details
         Given the query options
-            | geometries  | geojson |
             | annotations | true    |
 
         Given the node map
@@ -170,7 +156,7 @@ Feature: Basic Map Matching
     Scenario: Testbot - Geometry details
         Given the query options
             | overview   | full     |
-            | geometries | polyline |
+            | geometries | geojson  |
 
         Given the node map
             """
@@ -188,9 +174,6 @@ Feature: Basic Map Matching
             | abd   | abd       | 1,1,1,1.00009,1,1.00009,0.99991,1.00009 |
 
     Scenario: Testbot - Speed greater than speed threshhold, should split
-        Given the query options
-            | geometries | geojson |
-
         Given the node map
             """
             a b              c d
@@ -206,9 +189,6 @@ Feature: Basic Map Matching
             | abcd  | 0 1 2 3    | ab,cd     |
 
     Scenario: Testbot - Speed less than speed threshhold, should not split
-        Given the query options
-            | geometries | geojson |
-
         Given the node map
             """
             a b              c d

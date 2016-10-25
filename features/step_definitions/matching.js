@@ -24,7 +24,7 @@ module.exports = function () {
 
                     if (res.body.length) {
                         json = JSON.parse(res.body);
-                        // console.log('json', JSON.stringify(json));
+                        console.log('json', JSON.stringify(json));
                     }
 
                     if (headers.has('status')) {
@@ -128,19 +128,15 @@ module.exports = function () {
                     var q = d3.queue();
 
                     var testSubMatching = (sub, si, scb) => {
-                        if (subMatchings[si].length !== sub.length) {
-                            console.log('*** table matchings and matchings from api response are not the same length');
-                            // throw new Error('*** table matchings and api response are not the same');
-                        }
-
                         if (si >= subMatchings.length) {
                             ok = false;
-                            q.abort();
+                            // q.abort();
                             scb();
                         } else {
                             var sq = d3.queue();
                             var testSubNode = (ni, ncb) => {
                                 console.log('subMatchings[si][ni]', subMatchings[si][ni]);
+                                console.log('sub[ni]', sub[ni]);
                                 var node = this.findNodeByName(sub[ni]),
                                     outNode = subMatchings[si][ni];
                                 
@@ -148,7 +144,11 @@ module.exports = function () {
                                     encodedResult += sub[ni];
                                     extendedTarget += sub[ni];
                                 } else {
-                                    encodedResult += util.format('? [%s,%s]', outNode[0], outNode[1]);
+                                    if (outNode !== undefined) {
+                                        encodedResult += util.format('? [%s,%s]', outNode[0], outNode[1]);
+                                    } else {
+                                        encodedResult += '?';
+                                    }
                                     extendedTarget += util.format('%s [%d,%d]', node.lat, node.lon);
                                     ok = false;
                                 }
@@ -163,11 +163,18 @@ module.exports = function () {
                         }
                     };
 
+                    if (subMatchings.length != row.matchings.split(',').length) {
+                        ok = false;
+                        // throw new Error('*** table matchings and api response are not the same');
+                    }
+
                     row.matchings.split(',').forEach((sub, si) => {
                         q.defer(testSubMatching, sub, si);
                     });
 
-                    q.awaitAll(() => {
+                    q.awaitAll((error) => {
+                        if (error) return cb(error, null);
+
                         if (ok) {
                             if (headers.has('matchings')) {
                                 got.matchings = row.matchings;
