@@ -54,7 +54,7 @@ const constexpr char *block_id_to_name[] = {"NAME_OFFSETS",
                                             "LANE_DESCRIPTION_OFFSETS",
                                             "LANE_DESCRIPTION_MASKS"};
 
-struct SharedDataLayout
+struct DataLayout
 {
     enum BlockID
     {
@@ -101,7 +101,7 @@ struct SharedDataLayout
     std::array<uint64_t, NUM_BLOCKS> num_entries;
     std::array<uint64_t, NUM_BLOCKS> entry_size;
 
-    SharedDataLayout() : num_entries(), entry_size() {}
+    DataLayout() : num_entries(), entry_size() {}
 
     template <typename T> inline void SetBlockSize(BlockID bid, uint64_t entries)
     {
@@ -173,7 +173,7 @@ struct SharedDataLayout
     }
 };
 
-enum SharedDataType
+enum DataType
 {
     CURRENT_REGIONS,
     LAYOUT_1,
@@ -186,12 +186,12 @@ enum SharedDataType
 
 struct SharedDataTimestamp
 {
-    SharedDataType layout;
-    SharedDataType data;
+    DataType layout;
+    DataType data;
     unsigned timestamp;
 };
 
-inline std::string regionToString(const SharedDataType region)
+inline std::string regionToString(const DataType region)
 {
     switch (region)
     {
@@ -214,7 +214,7 @@ inline std::string regionToString(const SharedDataType region)
     }
 }
 
-static_assert(sizeof(block_id_to_name) / sizeof(*block_id_to_name) == SharedDataLayout::NUM_BLOCKS,
+static_assert(sizeof(block_id_to_name) / sizeof(*block_id_to_name) == DataLayout::NUM_BLOCKS,
               "Number of blocks needs to match the number of Block names.");
 }
 }
