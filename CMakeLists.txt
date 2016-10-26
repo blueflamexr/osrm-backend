@@ -292,7 +292,7 @@ if(ENABLE_MASON)
   if(NOT EXISTS "${CMAKE_CURRENT_SOURCE_DIR}/.mason/mason.cmake")
     #COMMAND git submodule update --init .mason WORKING_DIRECTORY ${CMAKE_SOURCE_DIR}
     execute_process(
-      COMMAND git clone -b master --single-branch https://github.com/mapbox/mason.git ${CMAKE_CURRENT_SOURCE_DIR}/.mason
+      COMMAND git clone -b master --depth 1 https://github.com/mapbox/mason.git ${CMAKE_CURRENT_SOURCE_DIR}/.mason
    )
   endif()
 
