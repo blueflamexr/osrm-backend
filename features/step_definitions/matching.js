@@ -51,8 +51,6 @@ module.exports = function () {
 
                     if (res.statusCode === 200) {
                         if (headers.has('matchings')) {
-                            // subMatchings = json.matchings.filter(m => !!m).map(sub => sub.geometry.coordinates);
-                            // subMatchings = [json.tracepoints.map(tracepoint => tracepoint.location)];
                             subMatchings = [];
                             var sub = [json.tracepoints[0].location];
                             for(var i = 1; i < json.tracepoints.length; i++){
@@ -94,7 +92,7 @@ module.exports = function () {
 
                         if (headers.has('geometry')) {
                             if (json.matchings.length != 1) throw new Error('*** Checking geometry only supported for matchings with one subtrace');
-                            geometry = json.matchings[0].geometry;
+                            geometry = json.matchings[0].geometry.coordinates;
                             console.log('geometry', geometry);
                         }
 

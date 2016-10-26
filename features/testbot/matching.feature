@@ -168,7 +168,7 @@ Feature: Basic Map Matching
 
         When I match I should get
             | trace | matchings | geometry                                |
-            | abd   | abd       | 1,1,1,1.00009,1,1.00009,0.99991,1.00009 |
+            | abd   | abd       | 1,1,1.00009,1,1.00009,1,1.00009,0.99991 |
 
     Scenario: Testbot - Speed greater than speed threshhold, should split  -- returns abcd with last node chopped off
         Given a grid size of 10 meters
