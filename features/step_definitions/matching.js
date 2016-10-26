@@ -51,8 +51,20 @@ module.exports = function () {
 
                     if (res.statusCode === 200) {
                         if (headers.has('matchings')) {
-                            subMatchings = json.matchings.filter(m => !!m).map(sub => sub.geometry.coordinates);
-                            // subMatchings = json.matchings.filter(m => !!m).map(sub => sub.matched_points);
+                            // subMatchings = json.matchings.filter(m => !!m).map(sub => sub.geometry.coordinates);
+                            // subMatchings = [json.tracepoints.map(tracepoint => tracepoint.location)];
+                            subMatchings = [];
+                            var sub = [json.tracepoints[0].location];
+                            for(var i = 1; i < json.tracepoints.length; i++){
+                                if(json.tracepoints[i-1].matchings_index === json.tracepoints[i].matchings_index) {
+                                    sub.push(json.tracepoints[i].location)
+                                } else {
+                                    subMatchings.push(sub);
+                                    sub = [json.tracepoints[i].location];
+                                }
+                            }
+                            subMatchings.push(sub);
+
                             console.log('subMatchings from api response', subMatchings);
                         }
 

@@ -8,14 +8,11 @@ Feature: Basic Map Matching
         Given the query options
             | geometries | geojson |
 
-    Scenario: Testbot - Map matching with outlier that has no candidate  -- returns ad as response
-        Given a grid size of 100 meters
+    Scenario: Testbot - Map matching with outlier that has no candidate
+        Given a grid size of 10 meters
         Given the node map
             """
             a b c d
-
-
-
                 1
             """
 
@@ -27,7 +24,7 @@ Feature: Basic Map Matching
             | trace | timestamps | matchings |
             | ab1d  | 0 1 2 3    | abcd      |
 
-    Scenario: Testbot - Map matching with trace splitting  -- passes
+    Scenario: Testbot - Map matching with trace splitting
         Given the node map
             """
             a b c d
@@ -42,7 +39,7 @@ Feature: Basic Map Matching
             | trace | timestamps | matchings |
             | abcd  | 0 1 62 63  | ab,cd     |
 
-    Scenario: Testbot - Map matching with core factor   -- problem with last node chopped off inside matchings, but all four nodes in tracepoints
+    Scenario: Testbot - Map matching with core factor
         Given the contract extra arguments "--core 0.8"
         Given the node map
             """
@@ -58,7 +55,7 @@ Feature: Basic Map Matching
             | trace | timestamps | matchings |
             | abcd  | 0 1 2 3    | abcd      |
 
-    Scenario: Testbot - Map matching with small distortion -- problem with last node chopped off inside matchings, but all four nodes in tracepoints
+    Scenario: Testbot - Map matching with small distortion
         Given the node map
             """
             a b c d e
@@ -81,7 +78,7 @@ Feature: Basic Map Matching
             | trace  | matchings |
             | afcde  | abcde     |
 
-    Scenario: Testbot - Map matching with oneways -- problem with last node chopped off inside matchings, but all four nodes in tracepoints
+    Scenario: Testbot - Map matching with oneways
         Given a grid size of 10 meters
         Given the node map
             """
@@ -174,6 +171,7 @@ Feature: Basic Map Matching
             | abd   | abd       | 1,1,1,1.00009,1,1.00009,0.99991,1.00009 |
 
     Scenario: Testbot - Speed greater than speed threshhold, should split  -- returns abcd with last node chopped off
+        Given a grid size of 10 meters
         Given the node map
             """
             a b              c d
@@ -189,6 +187,7 @@ Feature: Basic Map Matching
             | abcd  | 0 1 2 3    | ab,cd     |
 
     Scenario: Testbot - Speed less than speed threshhold, should not split  -- returns abcd with last node chopped off
+        Given a grid size of 10 meters
         Given the node map
             """
             a b c d
