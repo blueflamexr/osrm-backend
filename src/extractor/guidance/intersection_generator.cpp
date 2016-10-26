@@ -575,21 +575,34 @@ Intersection IntersectionGenerator::AdjustForJoiningRoads(const NodeID node_at_i
         const auto next_intersection_along_road =
             GetConnectedRoads(node_at_intersection, road.turn.eid);
 
+        // the order does not matter
+        const auto get_offset = [](const ConnectedRoad &lhs, const ConnectedRoad &rhs) {
+            return 0.5 * angularDeviation(lhs.turn.angle, rhs.turn.angle);
+        };
+
+        // When offsetting angles in our turns, we don't want to get past the next turn. This
+        // function simply limits an offset to be at most half the distance to the next turn in the
+        // offfset direction
+        const auto get_corrected_offset = [](const double offset,
+                                             const ConnectedRoad &road,
+                                             const ConnectedRoad &next_road_in_offset_direction) {
+            const auto offset_limit =
+                angularDeviation(road.turn.angle, next_road_in_offset_direction.turn.angle);
+            // limit the offset with an additional buffer
+            return (offset + MAXIMAL_ALLOWED_NO_TURN_DEVIATION > offset_limit) ? 0.5 * offset_limit
+                                                                               : offset;
+        };
+
         // check if the u-turn edge at the next intersection could be merged to the left/right. If
         // this is the case and the road is not far away (see previous distance check), if
         // influences the perceived angle.
         if (CanMerge(node_at_next_intersection, next_intersection_along_road, 0, 1))
         {
-            const auto offset = 0.5 * angularDeviation(next_intersection_along_road[0].turn.angle,
-                                                       next_intersection_along_road[1].turn.angle);
+            const auto offset =
+                get_offset(next_intersection_along_road[0], next_intersection_along_road[1]);
 
-            // limit the to not go past the next angle
-            const auto max_offset = angularDeviation(
-                road.turn.angle, intersection[(index + 1) % intersection.size()].turn.angle);
-            const auto corrected_offset = (offset + MAXIMAL_ALLOWED_NO_TURN_DEVIATION > max_offset)
-                                              ? 0.5 * max_offset
-                                              : offset;
-
+            const auto corrected_offset =
+                get_corrected_offset(offset, road, intersection[(index + 1) % intersection.size()]);
             // at the target intersection, we merge to the right, so we need to shift the current
             // angle to the left
             road.turn.angle = adjustAngle(road.turn.angle, corrected_offset);
@@ -601,16 +614,11 @@ Intersection IntersectionGenerator::AdjustForJoiningRoads(const NodeID node_at_i
                           next_intersection_along_road.size() - 1))
         {
             const auto offset =
-                0.5 * angularDeviation(
-                          next_intersection_along_road[0].turn.angle,
-                          next_intersection_along_road[next_intersection_along_road.size() - 1]
-                              .turn.angle);
+                get_offset(next_intersection_along_road[0],
+                           next_intersection_along_road[next_intersection_along_road.size() - 1]);
 
-            const auto max_offset =
-                angularDeviation(road.turn.angle, intersection[index - 1].turn.angle);
-            const auto corrected_offset = (offset + MAXIMAL_ALLOWED_NO_TURN_DEVIATION > max_offset)
-                                              ? 0.5 * max_offset
-                                              : offset;
+            const auto corrected_offset =
+                get_corrected_offset(offset, road, intersection[index - 1]);
             // at the target intersection, we merge to the left, so we need to shift the current
             // angle to the right
             road.turn.angle = adjustAngle(road.turn.angle, -corrected_offset);
