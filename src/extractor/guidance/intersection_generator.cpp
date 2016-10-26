@@ -582,10 +582,18 @@ Intersection IntersectionGenerator::AdjustForJoiningRoads(const NodeID node_at_i
         {
             const auto offset = 0.5 * angularDeviation(next_intersection_along_road[0].turn.angle,
                                                        next_intersection_along_road[1].turn.angle);
+
+            // limit the to not go past the next angle
+            const auto max_offset = angularDeviation(
+                road.turn.angle, intersection[(index + 1) % intersection.size()].turn.angle);
+            const auto corrected_offset = (offset + MAXIMAL_ALLOWED_NO_TURN_DEVIATION > max_offset)
+                                              ? 0.5 * max_offset
+                                              : offset;
+
             // at the target intersection, we merge to the right, so we need to shift the current
             // angle to the left
-            road.turn.angle = adjustAngle(road.turn.angle, offset);
-            road.turn.bearing = adjustAngle(road.turn.bearing, offset);
+            road.turn.angle = adjustAngle(road.turn.angle, corrected_offset);
+            road.turn.bearing = adjustAngle(road.turn.bearing, corrected_offset);
         }
         else if (CanMerge(node_at_next_intersection,
                           next_intersection_along_road,
@@ -597,10 +605,16 @@ Intersection IntersectionGenerator::AdjustForJoiningRoads(const NodeID node_at_i
                           next_intersection_along_road[0].turn.angle,
                           next_intersection_along_road[next_intersection_along_road.size() - 1]
                               .turn.angle);
+
+            const auto max_offset =
+                angularDeviation(road.turn.angle, intersection[index - 1].turn.angle);
+            const auto corrected_offset = (offset + MAXIMAL_ALLOWED_NO_TURN_DEVIATION > max_offset)
+                                              ? 0.5 * max_offset
+                                              : offset;
             // at the target intersection, we merge to the left, so we need to shift the current
             // angle to the right
-            road.turn.angle = adjustAngle(road.turn.angle, -offset);
-            road.turn.bearing = adjustAngle(road.turn.bearing, -offset);
+            road.turn.angle = adjustAngle(road.turn.angle, -corrected_offset);
+            road.turn.bearing = adjustAngle(road.turn.bearing, -corrected_offset);
         }
     }
     return intersection;
@@ -649,8 +663,7 @@ IntersectionGenerator::GetActualNextIntersection(const NodeID starting_node,
     return result;
 }
 
-const CoordinateExtractor&
-IntersectionGenerator::GetCoordinateExtractor() const
+const CoordinateExtractor &IntersectionGenerator::GetCoordinateExtractor() const
 {
     return coordinate_extractor;
 }
