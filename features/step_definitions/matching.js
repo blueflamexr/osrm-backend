@@ -53,7 +53,6 @@ module.exports = function () {
                         if (headers.has('matchings')) {
                             subMatchings = json.matchings.filter(m => !!m).map(sub => sub.geometry.coordinates);
                             // subMatchings = json.matchings.filter(m => !!m).map(sub => sub.matched_points);
-                            console.log('subMatchings', json.matchings);
                             console.log('subMatchings from api response', subMatchings);
                         }
 
@@ -141,10 +140,10 @@ module.exports = function () {
                                     outNode = subMatchings[si][ni];
                                 
                                 if (this.FuzzyMatch.matchLocation(outNode, node)) {
-                                    encodedResult += sub[ni];
+				    encodedResult += sub[ni];
                                     extendedTarget += sub[ni];
                                 } else {
-                                    if (outNode !== undefined) {
+                                    if (outNode != null) {
                                         encodedResult += util.format('? [%s,%s]', outNode[0], outNode[1]);
                                     } else {
                                         encodedResult += '?';

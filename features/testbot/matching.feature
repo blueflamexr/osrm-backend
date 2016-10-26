@@ -8,7 +8,7 @@ Feature: Basic Map Matching
         Given the query options
             | geometries | geojson |
 
-    Scenario: Testbot - Map matching with outlier that has no candidate
+    Scenario: Testbot - Map matching with outlier that has no candidate  -- returns ad as response
         Given a grid size of 100 meters
         Given the node map
             """
@@ -27,7 +27,7 @@ Feature: Basic Map Matching
             | trace | timestamps | matchings |
             | ab1d  | 0 1 2 3    | abcd      |
 
-    Scenario: Testbot - Map matching with trace splitting
+    Scenario: Testbot - Map matching with trace splitting  -- passes
         Given the node map
             """
             a b c d
@@ -42,7 +42,7 @@ Feature: Basic Map Matching
             | trace | timestamps | matchings |
             | abcd  | 0 1 62 63  | ab,cd     |
 
-    Scenario: Testbot - Map matching with core factor
+    Scenario: Testbot - Map matching with core factor   -- problem with last node chopped off inside matchings, but all four nodes in tracepoints
         Given the contract extra arguments "--core 0.8"
         Given the node map
             """
@@ -58,7 +58,7 @@ Feature: Basic Map Matching
             | trace | timestamps | matchings |
             | abcd  | 0 1 2 3    | abcd      |
 
-    Scenario: Testbot - Map matching with small distortion
+    Scenario: Testbot - Map matching with small distortion -- problem with last node chopped off inside matchings, but all four nodes in tracepoints
         Given the node map
             """
             a b c d e
@@ -81,7 +81,7 @@ Feature: Basic Map Matching
             | trace  | matchings |
             | afcde  | abcde     |
 
-    Scenario: Testbot - Map matching with oneways
+    Scenario: Testbot - Map matching with oneways -- problem with last node chopped off inside matchings, but all four nodes in tracepoints
         Given a grid size of 10 meters
         Given the node map
             """
@@ -98,7 +98,7 @@ Feature: Basic Map Matching
             | trace | matchings |
             | dcba  | hgfe      |
 
-    Scenario: Testbot - Matching with oneway streets
+    Scenario: Testbot - Matching with oneway streets -- funky need to look into this more cloesly
         Given a grid size of 10 meters
         Given the node map
             """
@@ -120,7 +120,7 @@ Feature: Basic Map Matching
             | dcba  | hg,gf,fe  |
             | efgh  | ab,bc,cd  |
 
-    Scenario: Testbot - Duration details
+    Scenario: Testbot - Duration details -- look into annotations property
         Given the query options
             | annotations | true    |
 
@@ -153,7 +153,7 @@ Feature: Basic Map Matching
             | abeh  | abcedgh   | 1,2,3,2,3,4,5,4,5,6,7 |
             | abci  | abc,ci    | 1,2,3,2,3,8,3,8       |
 
-    Scenario: Testbot - Geometry details
+    Scenario: Testbot - Geometry details -- not sure what should be returned here
         Given the query options
             | overview   | full     |
             | geometries | geojson  |
@@ -173,7 +173,7 @@ Feature: Basic Map Matching
             | trace | matchings | geometry                                |
             | abd   | abd       | 1,1,1,1.00009,1,1.00009,0.99991,1.00009 |
 
-    Scenario: Testbot - Speed greater than speed threshhold, should split
+    Scenario: Testbot - Speed greater than speed threshhold, should split  -- returns abcd with last node chopped off
         Given the node map
             """
             a b              c d
@@ -188,11 +188,11 @@ Feature: Basic Map Matching
             | trace | timestamps | matchings |
             | abcd  | 0 1 2 3    | ab,cd     |
 
-    Scenario: Testbot - Speed less than speed threshhold, should not split
+    Scenario: Testbot - Speed less than speed threshhold, should not split  -- returns abcd with last node chopped off
         Given the node map
             """
-            a b              c d
-                             e
+            a b c d
+                e
             """
 
         And the ways
